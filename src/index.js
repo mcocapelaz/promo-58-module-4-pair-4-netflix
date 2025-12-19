@@ -35,10 +35,10 @@ server.get("/apis/movies", async (req, res) => {
   let movies;
 
   if (req.query.genre !== "") {
-    const queryMoviesGenre = "SELECT * FROM movies WHERE genre = ?";
+    const queryMoviesGenre = `SELECT * FROM movies WHERE genre = ? ORDER BY title ${req.query.sort}`;
     [movies] = await connection.query(queryMoviesGenre, [req.query.genre]);
   } else {
-    const queryMovies = "SELECT * FROM movies";
+    const queryMovies = `SELECT * FROM movies  ORDER BY title ${req.query.sort}`;
     [movies] = await connection.query(queryMovies);
   }
   await connection.end();
