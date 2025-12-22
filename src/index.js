@@ -3,10 +3,13 @@ const cors = require("cors");
 require("dotenv").config();
 const mySql = require("mysql2/promise");
 
+
 // create and config server
 const server = express();
 server.use(cors());
 server.use(express.json());
+
+server.set('view engine', 'ejs');
 
 // init express aplication
 const serverPort = 4000;
@@ -34,6 +37,7 @@ server.get('/movie/:movieId', async (req, res) => {
   const queryMovie= "Select * FROM movies WHERE id=?";
   [foundMovie] = await connection.query(queryMovie, [req.params.movieId]);
   console.log(foundMovie)
+  res.render('movie')
 });
 
 server.get("/apis/movies", async (req, res) => {
@@ -52,3 +56,4 @@ server.get("/apis/movies", async (req, res) => {
   await connection.end();
   res.json(movies);
 });
+
