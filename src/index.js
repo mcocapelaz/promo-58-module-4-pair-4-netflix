@@ -28,6 +28,14 @@ const createConnection = async () => {
   return connection;
 };
 
+server.get('/movie/:movieId', async (req, res) => { 
+  console.log(req.params.movieId); 
+  const connection = await createConnection();
+  const queryMovie= "Select * FROM movies WHERE id=?";
+  [foundMovie] = await connection.query(queryMovie, [req.params.movieId]);
+  console.log(foundMovie)
+});
+
 server.get("/apis/movies", async (req, res) => {
   const connection = await createConnection();
   console.log('Salta el endpòint del servidor');
