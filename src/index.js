@@ -11,7 +11,7 @@ server.use(express.json());
 
 server.set('view engine', 'ejs');
 
-//Servidores estáticos 
+//Servidores estáticos
 
 const viewsStyle = path.join(__dirname, "..", "public" );
 server.use(express.static(viewsStyle));
@@ -36,14 +36,14 @@ const createConnection = async () => {
   return connection;
 };
 
-server.get('/movie/:movieId', async (req, res) => { 
-  console.log(req.params.movieId); 
+server.get('/apis/movie/:movieId', async (req, res) => {
+  console.log(req.params.movieId);
   const connection = await createConnection();
   const queryMovie= "Select * FROM movies WHERE id=?";
   [foundMovie] = await connection.query(queryMovie, [req.params.movieId]);
   console.log(foundMovie)
   res.render('movie', foundMovie[0])
-  await connection.end(); 
+  await connection.end();
 });
 
 server.get("/apis/movies", async (req, res) => {
