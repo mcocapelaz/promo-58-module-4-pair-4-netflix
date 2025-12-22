@@ -28,11 +28,19 @@ const createConnection = async () => {
   return connection;
 };
 
-server.get("/apis/netflix-v1/empty.json", async (req, res) => {
-  const queryMovies = "SELECT * FROM movies";
+server.get("/apis/movies", async (req, res) => {
   const connection = await createConnection();
-  const [result] = await connection.query(queryMovies);
-  await connection.end();
-  res.json(result);
-});
+  console.log('Salta el endpòint del servidor');
+  console.log('Params en el servidor', req.query.genre);
+  let movies;
 
+  if (req.query.genre !== "") {
+    const queryMoviesGenre = `SELECT * FROM movies WHERE genre = ? ORDER BY title ${req.query.sort}`;
+    [movies] = await connection.query(queryMoviesGenre, [req.query.genre]);
+  } else {
+    const queryMovies = `SELECT * FROM movies  ORDER BY title ${req.query.sort}`;
+    [movies] = await connection.query(queryMovies);
+  }
+  await connection.end();
+  res.json(movies);
+});
